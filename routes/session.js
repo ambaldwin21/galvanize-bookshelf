@@ -34,7 +34,7 @@ router.post('/', function(req, res, next) {
         res.send('Bad email or password')
       } else {
         delete user.hashed_password;
-        req.session.userId = user
+        req.session.userId = user.id
         res.send(humps.camelizeKeys(user));
       }
     }

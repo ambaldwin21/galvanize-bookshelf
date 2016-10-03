@@ -11,13 +11,14 @@ let authorization = function(req, res, next) {
     res.status(401);
     res.send('Unauthorized');
   } else {
+    console.log(req.session);
     next();
   }
 }
 
 router.get('/', authorization, (req, res, next) => {
   knex.from('favorites').innerJoin('books', 'favorites.book_id', 'books.id')
-  .where('favorites.user_id', 1)
+  .where('favorites.user_id', req.session.userId)
   .then((results) => {
     // console.log(results);
     let allFaves = [];
@@ -40,6 +41,8 @@ router.get('/', authorization, (req, res, next) => {
     });
 });
 
+
+
 router.get('/:id', authorization, (req, res, next) => {
   knex.from('favorites')
   .where('book_id', req.query.bookId)
@@ -55,7 +58,7 @@ router.get('/:id', authorization, (req, res, next) => {
 router.post('/', authorization, (req, res, next) => {
   let newBook = {
     book_id: req.body.bookId,
-    user_id: 1
+    user_id: req.session.userId
   }
   // console.log(newBook);
   knex('favorites')

@@ -19,7 +19,7 @@ router.post('/', (req, res, next) => {
   .then((users) => {
     const user = humps.camelizeKeys(users[0]);
     delete user.hashedPassword;
-    req.session.userId = users;
+    req.session.userId = user.id;
     res.json(user);
   })
   .catch((err) => {
