@@ -4,6 +4,8 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../knex');
 const humps = require('humps');
+const validate = require('express-validation')
+const validation = require('../validations/books')
 
 
 router.get('/', (req, res, next) => {
@@ -23,7 +25,7 @@ router.get('/:id', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', validate(validation), (req, res, next) => {
   // console.log(req.body);
   // console.log(req.params);
   let newBook = {
@@ -42,14 +44,6 @@ router.post('/', (req, res, next) => {
     })
 });
 
-// router.post(`/books`, (req, res) => {
-//   knex(`books`).insert(humps.decamelizeKeys(req.body), `id`).then((num) => {
-//     const id = num[0];
-//     knex(`books`).where(`id`, id).first().then((data) => {
-//       res.json(humps.camelizeKeys(data));
-//     });
-//   });
-// });
 
 router.patch('/:id', (req, res, next) => {
   knex('books').where('books.id', req.params.id).first().then((book) => {
