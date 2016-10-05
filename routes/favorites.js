@@ -42,7 +42,6 @@ router.get('/', authorization, (req, res, next) => {
 });
 
 
-
 router.get('/:id', authorization, (req, res, next) => {
   knex.from('favorites')
   .where('book_id', req.query.bookId)
